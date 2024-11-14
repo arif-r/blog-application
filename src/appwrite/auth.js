@@ -4,13 +4,12 @@ import conf from '../conf/conf.js';
 
 
 export class AuthService {
-    client = new Client();
+    client = new Client()
+        .setEndpoint(conf.appwriteURL)
+        .setProject(conf.appwriteProjectId);
     account;
 
     constructor() {
-        this.client
-            .setEndpoint(conf.appwriteURL)
-            .setProject(conf.appwriteProjectId);
         this.account = new Account(this.client)
     }
 
@@ -46,6 +45,7 @@ export class AuthService {
             return await this.account.get();
         } catch (error) {
             console.log("User is Not logged In.")
+            return false
         }
 
         return null;

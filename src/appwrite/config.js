@@ -1,17 +1,15 @@
 
 import { Client, ID, Databases, Storage, Query } from "appwrite";
-import conf from '../conf';
+import conf from '../conf/conf';
 
 export class Service{
-    client = new Client();
+    client = new Client()
+        .setEndpoint(conf.appwriteURL)
+        .setProject(conf.appwriteProjectId);
     database;
     bucket;
     
     constructor(){
-        this.client
-            .setEndpoint(conf.appwriteDatabaseId)
-            .setProject(conf.appwriteProjectId);
-
         this.database = new Databases(this.client);
         this.bucket = new Storage(this.client)
     }
@@ -98,12 +96,12 @@ export class Service{
 
     async uploadFile(file) {
         try {
-            await this.bucket.createFile(
+            return await this.bucket.createFile(
                 conf.appwriteBucketId,
                 ID.unique(), 
                 file
             );
-            return true
+            
         } catch (error) {
             console.log("Error :: ./appwrite/config.js : upload file method failed : " + error )
             return false
